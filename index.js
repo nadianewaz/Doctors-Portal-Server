@@ -26,11 +26,14 @@ async function run(){
     await client.connect();
     const database = client.db('doctors_portal');
     const appointmentsCollection = database.collection('appointments');
-
+    
+    // Appointments filer 
     app.get('/appointments',  async (req, res) =>{
       const email = req.query.email; 
-      const query = { email: email } 
-      console.log(query); 
+      const date = new Date(req.query.date).dayjs(date).format('DD/MM/YYYY'); 
+      // console.log(date);  
+      const query = { email: email, date: date } 
+      // console.log(query); 
       const cursor = appointmentsCollection.find(query); 
       const appointments = await cursor.toArray();
       res.json(appointments); 
